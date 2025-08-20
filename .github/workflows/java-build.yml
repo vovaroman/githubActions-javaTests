@@ -1,0 +1,28 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1 Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2 Install the required JDK and enable Maven-level caching
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4        # v4.x is the current major release
+        with:
+          distribution: temurin            # or 'corretto' | 'zulu' | etc
+          java-version: 21
+          cache: maven                     # speeds up repeated runs
+
+      # 3 Run the Maven build, which compiles sources and launches JUnit tests
+      - name: Build & unit-test
+        run: mvn --batch-mode --no-transfer-progress verify
